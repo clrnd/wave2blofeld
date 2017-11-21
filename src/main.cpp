@@ -1,6 +1,8 @@
 #include <numeric>
 #include <string>
 #include <iostream>
+#include <array>
+#include <vector>
 #include "AudioFile.h"
 #include "MidiFile.h"
 
@@ -16,7 +18,7 @@ int main(void){
 
     // 21 bit values => 1048575 to -1048575
     int max = 1048575;
-    vector<int> samples(64*128, 0);
+    std::array<int, 64*128> samples;
 
     for (int i = 0; i < numSamples; i+=2) {
         // between -1 and 1
@@ -34,7 +36,7 @@ int main(void){
 
     for (int wave = 0; wave < 64; ++wave){
 
-        vector<uchar> mm(410);
+        std::vector<uchar> mm(410);
 
         mm[0] = 0xf0; // SysEx
         mm[1] = 0x3e; // Waldorf ID
