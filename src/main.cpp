@@ -20,7 +20,7 @@ int main(void){
     int max = 1048575;
     std::array<int, 64*128> samples;
 
-    for (int i = 0; i < numSamples; i+=2) {
+    for (int i = 0; i < numSamples; i++) {
         // between -1 and 1
         double currentSample = audioFile.samples[0][i];
 
