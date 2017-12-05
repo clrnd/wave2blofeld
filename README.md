@@ -48,7 +48,7 @@ Where:
 ```
 
 For example, suppose you have a WAV file `wavetable3.wav` that has
-8192 samples:
+`64*128 = 8192` samples:
 
 ```
 $ soxi wavetable3.wav
@@ -66,7 +66,7 @@ Then, you would generate a SysEx file for transfering this
 wavetable into slot 82 with the name "Awful Sound" like this:
 
 ```
-wave2blofeld wavetable3.wav out.mid -n 3 -s "Awful Sound"
+wave2blofeld wavetable3.wav out.mid -s 3 -n "Awful Sound"
 ```
 
 Then it's just a matter of playing the midi file into the Blofeld with something

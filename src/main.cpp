@@ -35,7 +35,7 @@ Options parseOptions(int argc, char* argv[]){
         half("d", "double", "Use only half of the samples for each wave. Useful for banks created with 256 samples per wave.", cmd, false);
 
     TCLAP::ValueArg<unsigned int>
-        slot("s", "slot", "Wavetable to write to.", true, 0, "slot");
+        slot("s", "slot", "Wavetable to write to. Between 80 and 118.", true, 0, "slot");
     cmd.add(slot);
 
     TCLAP::ValueArg<std::string>
@@ -115,8 +115,6 @@ int main(int argc, char* argv[]){
     MidiFile mf;
     mf.setTicksPerQuarterNote(100);
 
-    std::string name = "Example Whatev";
-
     std::cout << "Generating..." << std::endl;
     for (int wave = 0; wave < 64; ++wave){
 
@@ -127,7 +125,7 @@ int main(int argc, char* argv[]){
         mm[2] = 0x13; // Blofeld ID
         mm[3] = 0x00; // Device ID
         mm[4] = 0x12; // Wavetable Dump
-        mm[5] = 0x50 + opts.slot - 1; // Wavetable Number
+        mm[5] = 0x50 + opts.slot - 80; // Wavetable Number
         mm[6] = wave & 0x7f; // Wave Number
         mm[7] = 0x00; // Format
 
@@ -138,7 +136,7 @@ int main(int argc, char* argv[]){
         }
 
         for (int i = 0; i < 14; ++i){
-            mm[392+i] = name[i] & 0x7f;
+            mm[392+i] = opts.name[i] & 0x7f;
         }
 
         mm[406] = 0x0; // Reserved
