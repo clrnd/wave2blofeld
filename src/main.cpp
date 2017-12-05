@@ -15,11 +15,13 @@ using uchar = unsigned char;
 struct Options {
     std::string infile;
     std::string outfile;
+    std::string name;
     bool half;
+    unsigned int slot;
 };
 
 Options parseOptions(int argc, char* argv[]){
-    TCLAP::CmdLine cmd("WAV to Blofeld SysEx", ' ', "0.1");
+    TCLAP::CmdLine cmd("A simple tool for transforming wavetables from a WAV file into Waldorf's Blofeld SysEx midi format.", ' ', "0.1");
 
     TCLAP::UnlabeledValueArg<std::string>
         infile("infile", "Input WAV file.", true, "", "infile");
@@ -30,7 +32,15 @@ Options parseOptions(int argc, char* argv[]){
     cmd.add(outfile);
 
     TCLAP::SwitchArg
-        half("d", "double", "Use only half of the samples.", cmd, false);
+        half("d", "double", "Use only half of the samples for each wave. Useful for banks created with 256 samples per wave.", cmd, false);
+
+    TCLAP::ValueArg<unsigned int>
+        slot("s", "slot", "Wavetable to write to.", true, 0, "slot");
+    cmd.add(slot);
+
+    TCLAP::ValueArg<std::string>
+        name("n", "name", "Wavetable name.", true, "", "name");
+    cmd.add(name);
 
     cmd.parse(argc, argv);
 
@@ -38,15 +48,35 @@ Options parseOptions(int argc, char* argv[]){
         .infile = infile.getValue(),
         .outfile = outfile.getValue(),
         .half = half.getValue(),
+        .slot = slot.getValue(),
+        .name = name.getValue(),
     };
+}
+
+
+bool isValid(std::string& s){
+    return std::all_of(s.begin(), s.end(),
+        [](char& c){
+            return 0x20 <= c and c <= 0x7f;
+        });
 }
 
 
 int main(int argc, char* argv[]){
     Options opts = parseOptions(argc, argv);
 
-    AudioFile<double> audioFile;
+    if (opts.slot > 118 or opts.slot < 80) {
+        std::cerr << "<slot> must be between 80 and 118." << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
+    if (opts.name.length() > 14 or !isValid(opts.name)) {
+        std::cerr << "<name> must be less than 14 ASCII characters long."
+                  << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    AudioFile<double> audioFile;
     if (!audioFile.load(opts.infile)) {
         exit(EXIT_FAILURE);
     }
@@ -97,7 +127,7 @@ int main(int argc, char* argv[]){
         mm[2] = 0x13; // Blofeld ID
         mm[3] = 0x00; // Device ID
         mm[4] = 0x12; // Wavetable Dump
-        mm[5] = 0x51; // Wavetable Number
+        mm[5] = 0x50 + opts.slot - 1; // Wavetable Number
         mm[6] = wave & 0x7f; // Wave Number
         mm[7] = 0x00; // Format
 
