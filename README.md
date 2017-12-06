@@ -9,6 +9,8 @@ waves next to each other, each with 128 (or 256) samples.
 The Blofeld has 38 slots (from 80 to 118) for custom Wavetables,
 and each can have a 14 character ASCII name.
 
+Download from the [releases](https://github.com/alvare/wave2blofeld/releases) page.
+
 ## Usage
 
 ```
