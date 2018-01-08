@@ -54,7 +54,7 @@ Options parseOptions(int argc, char* argv[]){
 }
 
 
-bool isValid(std::string& s){
+bool isValidName(std::string& s){
     return std::all_of(s.begin(), s.end(),
         [](char& c){
             return 0x20 <= c and c <= 0x7f;
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
         exit(EXIT_FAILURE);
     }
 
-    if (opts.name.length() > 14 or not isValid(opts.name)) {
+    if (opts.name.length() > 14 or not isValidName(opts.name)) {
         std::cerr << "<name> must be less than 14 ASCII characters long."
                   << std::endl;
         exit(EXIT_FAILURE);
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]){
         exit(EXIT_FAILURE);
     }
 
-    // 21 bit values => 1048575 to -1048575
+    // 21 bit values are in [-1048575, 1048575]
     int max = 1048575;
     std::array<int, 64*128> samples;
 
@@ -129,12 +129,14 @@ int main(int argc, char* argv[]){
         mm[6] = wave & 0x7f; // Wave Number
         mm[7] = 0x00; // Format
 
+        // actual samples
         for (int i = 0; i < 128; ++i){
             mm[8 + 3*i    ] = (samples[i + wave*128] >> 14) & 0x7f;
             mm[8 + 3*i + 1] = (samples[i + wave*128] >>  7) & 0x7f;
             mm[8 + 3*i + 2] = (samples[i + wave*128]      ) & 0x7f;
         }
 
+        // wavetable name
         for (int i = 0; i < 14; ++i){
             mm[392+i] = opts.name[i] & 0x7f;
         }
@@ -151,7 +153,6 @@ int main(int argc, char* argv[]){
         mf.addEvent(0, 0, mm);
     }
 
-    //mf.writeHex(std::cout);
     mf.write(opts.outfile);
 
     std::cout << "Done!" << std::endl;
