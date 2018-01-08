@@ -143,7 +143,7 @@ int main(int argc, char* argv[]){
         mm[407] = 0x0; // Reserved
 
         int checksum = std::accumulate(
-            mm.begin()+7, mm.end(), 0);
+            mm.begin()+7, mm.begin()+407, 0);
         mm[408] = checksum & 0x7f;
 
         mm[409] = 0xf7; // End
