@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
         exit(EXIT_FAILURE);
     }
 
-    if (opts.name.length() > 14 or !isValid(opts.name)) {
+    if (opts.name.length() > 14 or not isValid(opts.name)) {
         std::cerr << "<name> must be less than 14 ASCII characters long."
                   << std::endl;
         exit(EXIT_FAILURE);
