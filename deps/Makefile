@@ -3,6 +3,7 @@
 midifile = midifile-master
 audiofile = audiofile-master
 tclap = tclap
+
 all: $(midifile) $(audiofile) $(tclap)
 
 $(midifile):
