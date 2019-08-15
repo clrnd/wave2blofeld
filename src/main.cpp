@@ -45,11 +45,11 @@ Options parseOptions(int argc, char* argv[]){
     cmd.parse(argc, argv);
 
     return Options {
-        .infile = infile.getValue(),
-        .outfile = outfile.getValue(),
-        .half = half.getValue(),
-        .slot = slot.getValue(),
-        .name = name.getValue(),
+        infile.getValue(),
+        outfile.getValue(),
+        name.getValue(),
+        half.getValue(),
+        slot.getValue(),
     };
 }
 
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]){
         samples[i] = currentSample*max;
     }
 
-    MidiFile mf;
+    smf::MidiFile mf;
     mf.setTicksPerQuarterNote(100);
 
     std::cout << "Generating..." << std::endl;

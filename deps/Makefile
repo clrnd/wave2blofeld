@@ -14,8 +14,8 @@ $(midifile):
 
 $(audiofile):
 	mkdir $@
-	wget -q -P $@ https://rawgit.com/adamstark/AudioFile/master/AudioFile.cpp
-	wget -q -P $@ https://rawgit.com/adamstark/AudioFile/master/AudioFile.h
+	wget -q -P $@ https://raw.githubusercontent.com/adamstark/AudioFile/1.0.3/AudioFile.cpp
+	wget -q -P $@ https://raw.githubusercontent.com/adamstark/AudioFile/1.0.3/AudioFile.h
 
 $(tclap):
 	wget -q -O $@.tar.gz https://sourceforge.net/projects/tclap/files/tclap-1.2.1.tar.gz/download
