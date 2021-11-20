@@ -11,6 +11,8 @@ and each can have a 14 character ASCII name.
 
 Download from the [releases](https://github.com/alvare/wave2blofeld/releases) page.
 
+Linux users can build from source (tested on Fedora).
+
 ## Usage
 
 ```
