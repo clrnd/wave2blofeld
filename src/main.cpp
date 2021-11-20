@@ -137,7 +137,7 @@ int main(int argc, char* argv[]){
         }
 
         // wavetable name
-        for (int i = 0; i < 14; ++i){
+        for (int i = 0; i < opts.name.length(); ++i){
             mm[392+i] = opts.name[i] & 0x7f;
         }
 
