@@ -83,12 +83,12 @@ int main(int argc, char* argv[]){
 
     audioFile.printSummary();
 
-    int numSamples = audioFile.getNumSamplesPerChannel();
-    if (!opts.half and numSamples != 64*128) {
+    int fileSamples = audioFile.getNumSamplesPerChannel();
+    if (!opts.half and fileSamples != 64*128) {
         std::cerr << "File's first channel must have 64*128 = "
                   << 64*128 << " samples!" << std::endl;
         exit(EXIT_FAILURE);
-    } else if (opts.half and numSamples != 64*128*2) {
+    } else if (opts.half and fileSamples != 64*128*2) {
         std::cerr << "File's first channel must have 64*256 = "
                   << 64*128*2 << " samples!" << std::endl;
         exit(EXIT_FAILURE);
@@ -98,15 +98,9 @@ int main(int argc, char* argv[]){
     int max = 1048575;
     std::array<int, 64*128> samples;
 
-    for (int i = 0; i < numSamples; i++) {
-        double currentSample;
-
-        // if the file has the double amount of samples, skip every other one
-        if (opts.half) {
-            currentSample = audioFile.samples[0][i*2];
-        } else {
-            currentSample = audioFile.samples[0][i];
-        }
+    for (int i = 0; i < 64*128; i++) {
+        int s = opts.half ? i*2 : i;
+        double currentSample = audioFile.samples[0][s];
 
         // currentSample is between -1 and 1, normalizing
         samples[i] = currentSample*max;
